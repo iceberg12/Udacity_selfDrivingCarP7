@@ -1,81 +1,58 @@
 # Unscented Kalman Filter Project Starter Code
 Self-Driving Car Engineer Nanodegree Program
+---
 
-In this project utilize an Unscented Kalman Filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance outlined in the project reburic. 
+In this project utilize an Unscented Kalman Filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance [.09, .10, .40, .30] for position px, py and velocities vx, vy in 2D dimension. 
 
-This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
+[unscented]: ./images/unscented.png
+[dataframe]: ./images/dataframe.png
+[ds1]: ./images/ds1.png
+[ds2]: ./images/ds2.png
+[estimate_process_noise]: ./images/estimate_process_noise.png
+[NIS]: ./images/NIS.png
 
-This repository includes two files that can be used to set up and intall [uWebSocketIO](https://github.com/uWebSockets/uWebSockets) for either Linux or Mac systems. For windows you can use either Docker, VMware, or even [Windows 10 Bash on Ubuntu](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) to install uWebSocketIO. Please see [this concept in the classroom](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/16cf4a78-4fc7-49e1-8621-3450ca938b77) for the required version and installation scripts.
+## Setup 
+
+This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases). This repository includes two files that can be used to set up and intall [uWebSocketIO](https://github.com/uWebSockets/uWebSockets) for either Linux or Mac systems.
 
 Once the install for uWebSocketIO is complete, the main program can be built and ran by doing the following from the project top directory.
 
-1. mkdir build
-2. cd build
-3. cmake ..
-4. make
-5. ./UnscentedKF
+Build
+1. mkdir build && cd build
+2. cmake .. && make
+3. ./ExtendedKF ../data/sample-laser-radar-measurement-data-1.txt output1.txt > input1.log
 
-Note that the programs that need to be written to accomplish the project are src/ukf.cpp, src/ukf.h, tools.cpp, and tools.h
+Delete old build before rebuild again
+1. cd ..
+2. rm -r build
 
-The program main.cpp has already been filled out, but feel free to modify it.
+*Requirements*: RMSE of state vectors should be less than [0.1, 0.1, 0.52, 0.52].
 
-Here is the main protcol that main.cpp uses for uWebSocketIO in communicating with the simulator.
+## Theory
 
+Similar to Extended Kalman filter, Unscented Kalman filter also needs to solve the challenge of non-linear equation when projecting radar measurement into the state system. This challenge becomes harder when the motion system is not linear, for example in the case where the object is turning in a circular motion.
 
-INPUT: values provided by the simulator to the c++ program
+Enhanced from Extended Kalman filter which uses Jacobian matrix to linearize radar measurement equation, Unscented Kalman filter deal with this non-linearity through sigma points. In particular, to calculate the distribution of an output when feeding a Gaussian input through non-linear systems, the Unscented method samples some *sigma points* from the distribution, calculates the sampled outputs individually and then estimates the output distribution through the results. The following picture illustrates the process
 
-["sensor_measurement"] => the measurment that the simulator observed (either lidar or radar)
+![alt text][unscented]
 
+## Implementation
 
-OUTPUT: values provided by the c++ program to the simulator
+We need to tune the process noise parameters *std_a* and *std_yawdd* in order to get your solution working on both datasets. This is done by observing the variance of longitudinal acceleartion and yaw acceleration across the whole process. The Python notebook *plot.py* in this folder does that. By outputing all the necessary values to a log file (result_ds1.txt, result_ds1.txt), we have the following dataframe
 
-["estimate_x"] <= kalman filter estimated position x
-["estimate_y"] <= kalman filter estimated position y
-["rmse_x"]
-["rmse_y"]
-["rmse_vx"]
-["rmse_vy"]
+![alt text][dataframe]
 
----
+![alt text][estimate_process_noise]
 
-## Other Important Dependencies
+From the histograms, we can guess the values should be around $std_a = 0.4$ and $std_yawdd = 0.6$. The NIS graphs for the two sensor types are used to confirm the consistency of the Unscented Kalman filter
 
-* cmake >= v3.5
-* make >= v4.1
-* gcc/g++ >= v5.4
+![alt text][NIS]
 
-## Basic Build Instructions
+## Result
 
-1. Clone this repo.
-2. Make a build directory: `mkdir build && cd build`
-3. Compile: `cmake .. && make`
-4. Run it: `./UnscentedKF path/to/input.txt path/to/output.txt`. You can find
-   some sample inputs in 'data/'.
-    - eg. `./UnscentedKF ../data/obj_pose-laser-radar-synthetic-input.txt`
+The position tracking for the objects in Dataset 1 and Dataset 2 are plotted from the Simulator.
 
-## Editor Settings
+![alt text][ds1]
 
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
+![alt text][ds2]
 
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
-
-## Code Style
-
-Please stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html) as much as possible.
-
-## Generating Additional Data
-
-This is optional!
-
-If you'd like to generate your own radar and lidar data, see the
-[utilities repo](https://github.com/udacity/CarND-Mercedes-SF-Utilities) for
-Matlab scripts that can generate additional data.
-
-## Project Instructions and Rubric
-
-This information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/c3eb3583-17b2-4d83-abf7-d852ae1b9fff/concepts/f437b8b0-f2d8-43b0-9662-72ac4e4029c1)
-for instructions and the project rubric.
