@@ -26,7 +26,7 @@ Delete old build before rebuild again
 1. cd ..
 2. rm -r build
 
-**Requirements**: RMSE of state vectors should be less than [0.1, 0.1, 0.52, 0.52].
+**Requirements**: RMSE of state vectors should be less than [.09, .10, .40, .30].
 
 ## Theory
 
