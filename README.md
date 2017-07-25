@@ -26,7 +26,7 @@ Delete old build before rebuild again
 1. cd ..
 2. rm -r build
 
-*Requirements*: RMSE of state vectors should be less than [0.1, 0.1, 0.52, 0.52].
+**Requirements**: RMSE of state vectors should be less than [0.1, 0.1, 0.52, 0.52].
 
 ## Theory
 
@@ -50,7 +50,7 @@ From the histograms, we can guess the values should be around $std_a = 0.4$ and 
 
 ## Result
 
-The position tracking for the objects in Dataset 1 and Dataset 2 are plotted from the Simulator.
+The position tracking for the objects in Dataset 1 and Dataset 2 are plotted from the Simulator. They meet the required criteria specified in the **Setup** section
 
 ![alt text][ds1]
 
