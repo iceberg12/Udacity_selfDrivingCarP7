@@ -2,7 +2,9 @@
 Self-Driving Car Engineer Nanodegree Program
 ---
 
-In this project utilize an Unscented Kalman Filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance [.09, .10, .40, .30] for position px, py and velocities vx, vy in 2D dimension. 
+In this project utilize an Unscented Kalman Filter to estimate the state of a moving object of interest with noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance specified for position px, py and velocities vx, vy in 2D dimension. 
+
+**Requirements**: RMSE of state vectors should be less than [.09, .10, .40, .30] for Dataset 1 and [0.20, 0.20, 0.55, 0.55] for Dataset 2.
 
 [unscented]: ./images/unscented.png
 [dataframe]: ./images/dataframe.png
@@ -26,8 +28,6 @@ Delete old build before rebuild again
 1. cd ..
 2. rm -r build
 
-**Requirements**: RMSE of state vectors should be less than [.09, .10, .40, .30].
-
 ## Theory
 
 Similar to Extended Kalman filter, Unscented Kalman filter also needs to solve the challenge of non-linear equation when projecting radar measurement into the state system. This challenge becomes harder when the motion system is not linear, for example in the case where the object is turning in a circular motion.
@@ -50,7 +50,7 @@ From the histograms, we can guess the values should be around $std_a = 0.4$ and 
 
 ## Result
 
-The position tracking for the objects in Dataset 1 and Dataset 2 are plotted from the Simulator. They meet the required criteria specified in the **Setup** section
+The position tracking for the objects in Dataset 1 and Dataset 2 are plotted from the Simulator. They meet the required criteria specified at the beginning.
 
 ![alt text][ds1]
 
